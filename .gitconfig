@@ -1,6 +1,7 @@
 [user]
   name=darei
+
 [core]
-	excludesfile = ~/.gitignore
-	editor = nvim
-	ignorecase = false
+  excludesfile = ~/.gitignore
+  editor = nvim
+  ignorecase = false

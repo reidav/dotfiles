@@ -11,7 +11,14 @@ dotfiles:
 		des_dir="$$HOME/.config/$$dir_name"; \
 		mkdir -p $$des_dir; \
 		rm -rf $$des_dir/*; \
+		cp -rf $$config_dir_src/* $$des_dir; \
 	done;
 
-	# Override files
-	cp -rfT $(CURDIR) $(HOME)
+	# Apply root dotfiles
+	for file in $(shell find $(CURDIR) -name ".*" -not -name ".gitignore" -not -name ".git" -not -name ".config"); do \
+		f=$$(basename $$file); \
+		echo $$f; \
+	done;
+
+	# Generate nvim packer compiled file 		
+	nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'

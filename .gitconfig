@@ -1,0 +1,6 @@
+[user]
+  name=darei
+[core]
+	excludesfile = ~/.gitignore
+	editor = nvim
+	ignorecase = false

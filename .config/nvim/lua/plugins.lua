@@ -83,7 +83,13 @@ return require("packer").startup({
       event = "BufReadPre",
       config = get_setup("gitsigns"),
     })
-    use({ "neovim/nvim-lspconfig", config = get_setup("lsp") })
+    use({ 
+      "williamboman/nvim-lsp-installer", 
+      {
+        "neovim/nvim-lspconfig", 
+        config = get_setup("lsp") 
+      }
+    })
     use({
       "rmagatti/session-lens",
       requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },

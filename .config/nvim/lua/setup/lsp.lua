@@ -14,21 +14,22 @@ vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', op
 vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
+local supported_servers = { "bashls", "omnisharp", "gopls", "html", "tsserver", "powershell_es", "pyright", "sqls", "taplo", "yamlls", "prosemd_lsp", "rust_analyzer", "sumneko_lua" }, -- ensure these servers are always installed
+
+-- LSP Installer
+require("nvim-lsp-installer").setup ({
+  ensure_installed = supported_servers,
+  automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+  ui = {
+    icons = {
+      server_installed = "✓",
+      server_pending = "➜",
+      server_uninstalled = "✗"
+    }
+  }
+})
+
 -- LSP Server config
-require("lspconfig").tsserver.setup({
-  capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-  on_attach = function(client)
-    client.resolved_capabilities.document_formatting = false
-  end,
-})
-
-require("lspconfig").html.setup({
-  capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-  on_attach = function(client)
-    client.resolved_capabilities.document_formatting = false
-  end,
-})
-
 local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -50,8 +51,7 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
-local servers = { 'rust_analyzer', 'omnisharp' }
-for _, lsp in pairs(servers) do
+for _, lsp in pairs(supported_servers) do
   require('lspconfig')[lsp].setup {
     on_attach = on_attach,
     flags = {
